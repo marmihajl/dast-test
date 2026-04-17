@@ -1,0 +1,7 @@
+Student Grades - Spring 2026
+============================
+Ivan Horvat    - Software Engineering: A
+Ana Kovac      - Database Systems: A+
+Marko Novak    - Computer Networks: B+
+Petra Babic    - Web Development: A
+Luka Maric     - Operating Systems: B

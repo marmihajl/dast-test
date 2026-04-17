@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Students</title>
+</head>
+<body>
+    <h1>Student Search</h1>
+    <a href="/">Back to Home</a>
+
+    <form action="/search" method="get">
+        <label for="query">Search by name:</label>
+        <input type="text" id="query" name="query" th:value="${query}" placeholder="Enter student name..."/>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Results</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>JMBAG</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="s : ${students}">
+                <td th:text="${s.id}"></td>
+                <td th:text="${s.jmbag}"></td>
+                <td th:text="${s.firstName}"></td>
+                <td th:text="${s.lastName}"></td>
+                <td th:text="${s.email}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

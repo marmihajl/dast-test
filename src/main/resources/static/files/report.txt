@@ -1,0 +1,4 @@
+RITEH Student Report - 2026
+===========================
+Total students enrolled: 5
+Average GPA: 3.75

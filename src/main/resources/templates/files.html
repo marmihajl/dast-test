@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File Downloads</title>
+</head>
+<body>
+    <h1>File Downloads</h1>
+    <a href="/">Back to Home</a>
+
+    <h2>Available Files</h2>
+    <ul>
+        <li th:each="f : ${files}">
+            <a th:href="@{/download(file=${f})}" th:text="${f}"></a>
+        </li>
+    </ul>
+
+    <h2>Download by Name</h2>
+    <form action="/download" method="get">
+        <label for="file">File name:</label>
+        <input type="text" id="file" name="file" placeholder="Enter file name..."/>
+        <button type="submit">Download</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,13 @@
+target/
+*.jar
+*.log
+uploads/
+build.log
+git-out.txt
+git-status.txt
+endpoint-test.txt
+zap-output.txt
+settings-local.xml
+.idea/
+*.iml
+.vscode/
