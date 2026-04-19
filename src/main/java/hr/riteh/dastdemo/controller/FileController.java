@@ -1,5 +1,10 @@
 package hr.riteh.dastdemo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -13,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Controller
+@Tag(name = "File", description = "File listing and download operations")
 public class FileController {
 
     private final Path basePath = Paths.get(System.getProperty("user.dir"), "uploads");
@@ -26,14 +32,22 @@ public class FileController {
                 "Student Grades - Spring 2026\n============================\nIvan Horvat - A\nAna Kovac - A+\n");
     }
 
+    @Operation(summary = "List files", description = "Displays a page listing all available files for download")
+    @ApiResponse(responseCode = "200", description = "File listing page rendered successfully")
     @GetMapping("/files")
     public String filesPage(Model model) {
         model.addAttribute("files", new String[]{"report.txt", "grades.txt"});
         return "files";
     }
 
+    @Operation(summary = "Download file", description = "Downloads the specified file by name")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "File downloaded successfully"),
+            @ApiResponse(responseCode = "404", description = "File not found")
+    })
     @GetMapping("/download")
-    public void download(@RequestParam String file,
+    public void download(@Parameter(description = "Name of the file to download", example = "report.txt", required = true)
+                         @RequestParam String file,
                          HttpServletResponse response) throws Exception {
         Path filePath = basePath.resolve(file);
 
