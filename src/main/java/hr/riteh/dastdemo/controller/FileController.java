@@ -2,6 +2,7 @@ package hr.riteh.dastdemo.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -43,13 +45,26 @@ public class FileController {
     @Operation(summary = "Download file", description = "Downloads the specified file by name")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "File downloaded successfully"),
+            @ApiResponse(responseCode = "400", description = "Missing or empty file name"),
             @ApiResponse(responseCode = "404", description = "File not found")
     })
     @GetMapping("/download")
-    public void download(@Parameter(description = "Name of the file to download", example = "report.txt", required = true)
-                         @RequestParam String file,
+    public void download(@Parameter(description = "Name of the file to download", example = "report.txt", required = true,
+                                    schema = @Schema(minLength = 1, pattern = "^[a-zA-Z0-9._-]+$"))
+                         @RequestParam(required = false) String file,
                          HttpServletResponse response) throws Exception {
-        Path filePath = basePath.resolve(file);
+        if (file == null || file.isBlank()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'file' is required and must not be empty");
+            return;
+        }
+
+        Path filePath;
+        try {
+            filePath = basePath.resolve(file);
+        } catch (InvalidPathException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid file name");
+            return;
+        }
 
         if (Files.exists(filePath)) {
             response.setContentType("application/octet-stream");

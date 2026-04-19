@@ -26,9 +26,10 @@ public class StudentController {
     public String search(@Parameter(description = "Search query for student name", example = "Ivan")
                          @RequestParam(required = false, defaultValue = "") String query,
                          Model model) {
-        String sql = "SELECT * FROM student WHERE first_name LIKE '%" + query
-                + "%' OR last_name LIKE '%" + query + "%'";
+        String sql = "SELECT * FROM student WHERE first_name LIKE :pattern OR last_name LIKE :pattern";
+        String pattern = "%" + query + "%";
         List<?> results = entityManager.createNativeQuery(sql, hr.riteh.dastdemo.model.Student.class)
+                .setParameter("pattern", pattern)
                 .getResultList();
         model.addAttribute("students", results);
         model.addAttribute("query", query);
